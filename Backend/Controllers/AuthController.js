@@ -1,6 +1,8 @@
 const User = require("../Models/User");
 const bcrypt = require("bcryptjs");
 const {createAccessToken} = require("../Helpers/Auth");
+
+
 module.exports = {
     async register(req, res) {
         const { name, email, password } = req.body;
@@ -31,4 +33,4 @@ module.exports = {
 
 
     }
-}
+};
