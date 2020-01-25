@@ -7,7 +7,7 @@ module.exports = {
     async register(req, res) {
         const { name, email, password } = req.body;
         if(!name || !email || !password) {
-            return res.status(400).json({code: 400, errorMessage: "Bad format."})
+            return res.status(405).json({code: 400, errorMessage: "Bad format."})
         }
         User.findOne({email})
             .then(user => {
@@ -15,12 +15,12 @@ module.exports = {
                     return res.status(400).json({code: 400, errorMessage: "Email already in use"})
                 }
                 bcrypt.hash(password, 10)
-                    .then(hashedPassword => {
+                    .then(async hashedPassword => {
                         const  user = new User({name, email, password: hashedPassword});
-                        const token = createAccessToken(email);
-                        user.accessToken = token;
-                        user.save();
-                        return res.status(200).json({code: 200, data: token});
+                        user.accessToken = createAccessToken(email);
+                        await user.save();
+
+                        return res.status(200).json({code: 200, user: await User.findOne({email: user.email}, "name email accessToken posts").populate("posts").exec()});
 
                     })
                     .catch(err => {
@@ -28,9 +28,33 @@ module.exports = {
                     })
             })
             .catch(err => {
-                return res.status(400).json({code: 400, errorMessage: "A error ocurred. We're sorry."})
+                return res.status(400).json({code: 400, errorMessage: "A error ocurred. We're sorry.", err})
             });
+    },
+    login: async function (req, res) {
+        const {email, password} = req.body;
+        if (!email || !password) {
+            return res.status(400).json({code: 400, errorMessage: "Bad format."})
+        }
 
+        User.findOne({email})
+            .then(async user =>  {
+                if (!user || !user.email) {
+                    return res.status(405).json({code: 405, errorMessage: "Could not find your email."})
+                }
+                let doesPasswordMatch = await bcrypt.compare(password, user.password);
+                if(doesPasswordMatch) {
+                    const accessToken = createAccessToken(email);
+                    user.accessToken =  accessToken;
+                    user.save();
+                    return res.status(200).json({code: 200, user: await User.findOne({email: user.email}, "name email accessToken posts").populate("posts").exec()});
+                } else {
+                    return res.status(405).json({code: 405, errorMessage: "Wrong Password"});
 
+                }
+            })
+            .catch(err => {
+                return res.status(500).json({code: 500, errorMessage: "A error ocurred. We're sorry."})
+            });
     }
 };

@@ -2,7 +2,7 @@ const {sign, verify} = require("jsonwebtoken")
 
 module.exports = {
     createAccessToken (email) {
-        return sign({email}, process.env.JWT_ACCESS_TOKEN, { expiresIn: '1h' });
+        return sign({email}, process.env.JWT_ACCESS_TOKEN, {expiresIn: '7d'});
     },
     validateAccessToken (token) {
         try {
