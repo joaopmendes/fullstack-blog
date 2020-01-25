@@ -39,7 +39,7 @@ module.exports = {
     },
     async store(req, res) {
         let {subject, body, tags} = req.body;
-        let tagsArray = tags ? tags.split(",") : [];
+
         // Returns an array with errors
         const errors = validateStoreInputs(subject, body);
         if (errors.length > 0) {
@@ -50,7 +50,7 @@ module.exports = {
         try {
             post = new Post({subject, body});
             post.author = req.user;
-
+            let tagsArray = tags ? tags.split(",") : [];
             if (tagsArray && tagsArray.length > 0) {
                 for (const tag of tagsArray) {
                     try {
@@ -93,10 +93,53 @@ module.exports = {
                     return res.status(200).json({code: 200, message: "Post deleted"})
                 })
                 .catch(err => {
-                    console.log("I got here")
                     return res.status(500).json({code: 500, message: "Post cannot be deleted"})
                 })
         }
 
+    },
+    async update(req, res) {
+        const  {id} = req.params;
+        const {subject, body, tags} = req.body;
+        // Returns an array with errors
+        const errors = validateStoreInputs(subject, body);
+        if (errors.length > 0) {
+            return res.status(405).json({errors});
+        }
+        if (!await checkIfPostIsFromUser(id, req.user)) {
+            return res.status(403).json({code: 403, message: "Post cannot be updated with your permissions"})
+        } else {
+            return Post.findById(id)
+                .then(async (doc) => {
+                    if(!doc) {
+                        return res.status(400).json({code: 500, error: "Could not find post with that id"})
+                    }
+                    doc.subject = subject;
+                    doc.body = body;
+                    await doc.clearTags();
+                    let tagsArray = tags ? tags.split(",") : [];
+                    if (tagsArray && tagsArray.length > 0) {
+                        for (const tag of tagsArray) {
+                            try {
+                                await doc.addTag(tag);
+                            } catch (e) {
+                                return res.status(500).json({error: "Something went wrong trying to update post tags", e});
+                            }
+                        }
+                    } else {
+                        try {
+                            await doc.save()
+
+                        }catch (e) {
+                            return res.status(500).json({error: "Something went wrong trying to update post", e});
+
+                        }
+                    }
+                    return res.status(200).json({code: 200, data: doc})
+                })
+                .catch(err => {
+                    return res.status(500).json({code: 500, message: "Post cannot be updated"})
+                })
+        }
     }
 };
