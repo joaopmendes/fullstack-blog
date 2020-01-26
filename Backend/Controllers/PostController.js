@@ -50,6 +50,9 @@ module.exports = {
         try {
             post = new Post({subject, body});
             post.author = req.user;
+            if(req.file) {
+                post.postImage = req.file.path;
+            }
             let tagsArray = tags ? tags.split(",") : [];
             if (tagsArray && tagsArray.length > 0) {
                 for (const tag of tagsArray) {
@@ -116,6 +119,9 @@ module.exports = {
                     }
                     doc.subject = subject;
                     doc.body = body;
+                    if(req.file) {
+                        doc.postImage = req.file.path;
+                    }
                     await doc.clearTags();
                     let tagsArray = tags ? tags.split(",") : [];
                     if (tagsArray && tagsArray.length > 0) {

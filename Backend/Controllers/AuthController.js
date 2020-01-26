@@ -6,6 +6,9 @@ const {createAccessToken} = require("../Helpers/Auth");
 module.exports = {
     async register(req, res) {
         const { name, email, password } = req.body;
+
+
+
         if(!name || !email || !password) {
             return res.status(405).json({code: 400, errorMessage: "Bad format."})
         }
@@ -18,9 +21,12 @@ module.exports = {
                     .then(async hashedPassword => {
                         const  user = new User({name, email, password: hashedPassword});
                         user.accessToken = createAccessToken(email);
+                        if(req.file) {
+                            user.profilePicture = req.file.path.replace(/\\/g, "/")
+                        }
                         await user.save();
 
-                        return res.status(200).json({code: 200, user: await User.findOne({email: user.email}, "name email accessToken posts").populate("posts").exec()});
+                        return res.status(200).json({code: 200, user: await User.findOne({email: user.email}, "name email accessToken posts profilePicture").populate("posts").exec()});
 
                     })
                     .catch(err => {

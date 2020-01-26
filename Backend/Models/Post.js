@@ -4,6 +4,7 @@ const { searchTagByName, createTagByName } = require("../Helpers/Tag");
 const postScheema = new db.Schema({
     subject: {type: String, required: true},
     body: {type: String, required: true},
+    postImage: {type: String, default: ""},
     author: { type: db.Schema.Types.ObjectId, ref: 'user' },
     tags: [{ type: db.Schema.Types.ObjectId, ref: 'tag' }]
 });
