@@ -1,146 +1,120 @@
-import React, {useState} from 'react';
-import {InputText} from "../../Components/MacroControllers/InputText";
-import {FormWrapper} from "../../Components/MacroControllers/FormWrapper";
-import {PageHeading} from "../../Components/MacroControllers/PageHeading";
-import {MdEmail, MdContacts} from "react-icons/md"
-import {FaCog} from "react-icons/fa"
-import {Button} from "../../Components/MacroControllers/Button";
-import styled from "styled-components"
-import {FileInput} from "../../Components/MacroControllers/FileInput";
-import {ErrorMessage} from "../../Components/MacroControllers/macro.styles";
-import axios from "axios"
+import React, { useState } from "react";
+import { InputText } from "../../Components/MacroControllers/InputText";
+import { FormWrapper } from "../../Components/MacroControllers/FormWrapper";
+import { PageHeading } from "../../Components/MacroControllers/PageHeading";
+import { MdEmail, MdContacts } from "react-icons/md";
+import { FaCog } from "react-icons/fa";
+import axios from "axios";
+import { useFormik } from "formik";
+import { Button } from "../../Components/MacroControllers/Button";
+import { FileInput } from "../../Components/MacroControllers/FileInput";
+import { WrapperSubmitButton } from "../../globa.styles";
+import {initialValues, validationSchema} from "./register.config"
 export const RegisterPage = ({}) => {
-    // Name relative
-    const [name, setName] = useState("");
-    const [isNameValid, setIsNameValid] = useState(false);
+  const onSubmit = (values, { setSubmitting, setErrors }) => {
+    setSubmitting(true);
+    const data = new FormData();
+    data.append("name", values.name);
+    data.append("email", values.email);
+    data.append("password", values.password);
+    if (values.avatar) data.append("avatar_image", values.avatar);
+  
+    console.log(data);
+    axios
+      .post("/api/register", data)
+      .then(res => {
+        setSubmitting(false);
+      })
+      .catch(err => {
+        setSubmitting(false);
+      });
+  }
+  const formik = useFormik({
+      initialValues,
+      validationSchema,
+      onSubmit
+    });
 
-    // Email relative
-    const [email, setEmail] = useState("");
-    const [isEmailValid, setIsEmailValid] = useState(false);
-    const emailPatter = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const {
+    errors,
+    values,
+    handleChange,
+    setFieldValue,
+    handleBlur,
+    touched,
+    isSubmitting,
+    isValid,
+    handleSubmit
+  } = formik;
 
-    // Password relative
-    const [password, setPassword] = useState("");
-    const [isPasswordValid, setIsPassworrdValid] = useState(false);
-    const [passwordErrorMessage, setPasswordErrorMessage] = useState("You must provide a valid password (3 or more lower case letters, 2 or more upper case letters, 2 or more numbers, 1 or more special characters ).");
-    const passwordPattern = /.+/;
+  return (
+    <>
+      <PageHeading title={"Register"} />
+      <FormWrapper>
+        <form onSubmit={handleSubmit}>
+          <InputText
+            PrefixIcon={MdContacts}
+            errorMessage={errors.name}
+            error={Boolean(errors.name)}
+            touched={touched.name}
+            label={"Your Name"}
+            resetField={() => setFieldValue("name", "")}
+            value={values.name}
+            name={"name"}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          <InputText
+            PrefixIcon={MdEmail}
+            errorMessage={errors.email}
+            error={Boolean(errors.email)}
+            touched={touched.email}
+            label={"Your Email"}
+            resetField={() => setFieldValue("email", "")}
+            value={values.email}
+            name={"email"}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          <InputText
+            PrefixIcon={FaCog}
+            type={"password"}
+            errorMessage={errors.password}
+            resetField={() => setFieldValue("password", "")}
+            error={Boolean(errors.password)}
+            touched={touched.password}
+            label={"Your password"}
+            value={values.password}
+            name={"password"}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
 
-    // ConfirmPassword
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
-    const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState("You must provide a confirm password equals to previous password.");
+          <InputText
+            PrefixIcon={FaCog}
+            type={"password"}
+            errorMessage={errors.confirmPassword}
+            error={Boolean(errors.confirmPassword)}
+            resetField={() => setFieldValue("confirmPassword", "")}
+            touched={touched.confirmPassword}
+            label={"Confirm Password"}
+            value={values.confirmPassword}
+            name={"confirmPassword"}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          <FileInput onChange={file => setFieldValue("avatar", file)} value={values.avatar} />
 
-    // ConfirmPassword
-    const [file, setFile] = useState("");
-    // Form Geral
-    const [isFormValid, setIsFormValid] = useState(false);
-    const [errorMessages, setErrorMessages] = useState([]);
-    const validateForm = () => {
-        if(isEmailValid && isPasswordValid && isConfirmPasswordValid && isNameValid) {
-            setIsFormValid(true);
-            setErrorMessages([]);
-            return true;
-        }
-        setIsFormValid(false);
-        setErrorMessages(["Please fill the required fields."]);
-        return false;
-
-    };
-    const sendForm = () => {
-        if(validateForm()) {
-            var formData = new FormData();
-            if(file) {
-                formData.append('profile_image', file);
-            }
-            formData.append("name", name);
-            formData.append("email", email);
-            formData.append("password", password);
-
-            axios.post("/api/register", formData)
-                .then(res => console.log(res))
-                .catch(err => console.log(err))
-
-        }
-    }
-    // Name relative
-    const onNameChange = (name, valid) => {
-        setName(name);
-        setIsNameValid(valid);
-        validateForm();
-    };
-
-    // Email relative
-    const onEmailChange = (email, valid) => {
-        setEmail(email);
-        setIsEmailValid(valid);
-        validateForm();
-
-    };
-
-    // Password relative
-    const onPasswordChange = (email, valid) => {
-        setPassword(email);
-        setIsPassworrdValid(valid);
-        validateForm();
-    };
-
-    // ConfirmPassword
-    const onConfirmPasswordChange = (password, valid) => {
-        setConfirmPassword(password);
-        setIsConfirmPasswordValid(valid);
-        validateForm();
-    };
-    const validateConfirmPassword = (value) => {
-        return value === password;
-    };
-    return (
-        <>
-            <PageHeading title={"Register"}/>
-            <FormWrapper>
-                <InputText
-                    PrefixIcon={MdContacts}
-                    errorMessage={"You must provide a first and last name."}
-                    regex={"\\w+ \\w+.+"}
-                    label={"Your Name"}
-                    value={name}
-                    onChange={(name, valid) => onNameChange(name, valid)}/>
-                <InputText
-                    PrefixIcon={MdEmail}
-                    errorMessage={"You must provide a email."}
-                    label={"Your Email"}
-                    regex={emailPatter}
-                    value={email}
-                    onChange={(email, valid) => onEmailChange(email, valid)}/>
-                <InputText
-                    PrefixIcon={FaCog}
-                    type={"password"}
-                    errorMessage={passwordErrorMessage}
-                    label={"Your Password"}
-                    regex={passwordPattern}
-                    value={password}
-                    onChange={(password, valid) => onPasswordChange(password, valid)}/>
-
-                <InputText
-                    PrefixIcon={FaCog}
-                    type={"password"}
-                    errorMessage={confirmPasswordErrorMessage}
-                    validate={validateConfirmPassword}
-                    label={"Confirm Password"}
-                    value={confirmPassword}
-                    onChange={(confirmPassword, valid) => onConfirmPasswordChange(confirmPassword, valid)}/>
-                    <FileInput onChange={(file) => setFile(file) } value={file}/>
-
-                {errorMessages.map(error => <ErrorMessage>{error}</ErrorMessage>)}
-                <WrapperSubmitButton>
-                    <Button onClick={sendForm} backgroundColor={isFormValid ? "success" : "danger"} disabled={!isFormValid} >Register</Button>
-                </WrapperSubmitButton>
-            </FormWrapper>
-        </>
-    );
+          <WrapperSubmitButton>
+            <Button
+              backgroundColor={isValid ? "success" : "danger"}
+              disabled={!isValid || isSubmitting}
+            >
+              Register
+            </Button>
+          </WrapperSubmitButton>
+        </form>
+      </FormWrapper>
+    </>
+  );
 };
-const WrapperSubmitButton = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  margin: 2rem auto
-`;

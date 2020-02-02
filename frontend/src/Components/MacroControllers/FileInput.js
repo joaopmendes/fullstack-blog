@@ -46,7 +46,6 @@ export const FileInput = ({label, placeholder, value, displayErrorWhenImTrue,onC
         }
 
     };
-    console.log(value)
     return (
         <ImagePreviewWrapper>
             <ImagePreviewImg src={imagePreview} />
