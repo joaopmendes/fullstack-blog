@@ -30,7 +30,7 @@ export const LoginPage = ({}) => {
             axios.post("/api/login", data)
                 .then(res => {
                     setSubmitting(false)
-
+                    
                 })
                 .catch(err => {
                     setSubmitting(false)

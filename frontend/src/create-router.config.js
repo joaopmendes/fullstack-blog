@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components"
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import {HomePage} from "./Pages/home/home.page";
 import {RegisterPage} from "./Pages/register/register.page";
