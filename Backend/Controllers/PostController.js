@@ -86,7 +86,7 @@ module.exports = {
     async destroy(req, res) {
         const  {id} = req.params;
 
-        if (!await checkIfPostIsFromUser(id, req.user)) {
+        if (!await checkIfPostIsFromUser(id, req.user)) { 
             return res.status(403).json({code: 403, message: "Post cannot be deleted with your permissions"})
         } else {
             return Post.findByIdAndDelete(id)
