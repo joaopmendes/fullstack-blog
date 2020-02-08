@@ -1,13 +1,10 @@
-
-
-
 export const initialState = {
-    userLoggedIn: false,
-    user: {
-        accessToken: "",
-        name: "",
-        email: "",
-        posts:  [],
-        profilePicture: "",
-    }
+  userLoggedIn: false,
+  user: {
+    accessToken: '',
+    name: '',
+    email: '',
+    posts: [],
+    profilePicture: '',
+  },
 };

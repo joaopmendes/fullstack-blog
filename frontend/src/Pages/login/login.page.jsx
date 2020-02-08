@@ -1,40 +1,40 @@
-import React from "react";
-import * as Yup from "yup";
-import { useFormik } from "formik";
-import axios from "axios";
-import { PageHeading } from "../../Components/MacroControllers/PageHeading";
-import { FormWrapper } from "../../Components/MacroControllers/FormWrapper";
-import LoginForm from "../../Components/LoginForm/LoginForm";
+import React from 'react';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
+import axios from 'axios';
+import { PageHeading } from '../../Components/MacroControllers/PageHeading';
+import { FormWrapper } from '../../Components/MacroControllers/FormWrapper';
+import LoginForm from '../../Components/LoginForm/LoginForm';
 
-export const LoginPage = ({}) => {
+const LoginPage = () => {
   const validationSchema = Yup.object().shape({
     email: Yup.string()
-      .email("Email not valid.")
-      .required("Email is required!"),
+      .email('Email not valid.')
+      .required('Email is required!'),
     password: Yup.string()
-      .min(6, "Password has to be longer than 6 characters!")
-      .required("Password is required!")
+      .min(6, 'Password has to be longer than 6 characters!')
+      .required('Password is required!'),
   });
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: ""
+      email: '',
+      password: '',
     },
     validationSchema,
     onSubmit: (values, { setSubmitting }) => {
       setSubmitting(true);
       const data = new FormData();
-      data.append("email", values.email);
-      data.append("password", values.password);
+      data.append('email', values.email);
+      data.append('password', values.password);
       axios
-        .post("/api/login", data)
-        .then(res => {
+        .post('/api/login', data)
+        .then(() => {
           setSubmitting(false);
         })
-        .catch(err => {
+        .catch(() => {
           setSubmitting(false);
         });
-    }
+    },
   });
   const {
     errors,
@@ -45,12 +45,12 @@ export const LoginPage = ({}) => {
     isSubmitting,
     isValid,
     handleSubmit,
-    setFieldValue
+    setFieldValue,
   } = formik;
 
   return (
     <>
-      <PageHeading title={"Login"} />
+      <PageHeading title="Login" />
       <FormWrapper>
         <LoginForm
           errors={errors}
@@ -67,3 +67,5 @@ export const LoginPage = ({}) => {
     </>
   );
 };
+
+export default LoginPage;
