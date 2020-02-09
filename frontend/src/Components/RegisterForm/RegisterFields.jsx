@@ -69,12 +69,16 @@ const RegisterFields = ({
     />
   </>
 );
+RegisterFields.defaultProps = {
+  errors: {},
+  touched: {},
+};
 RegisterFields.propTypes = {
-  errors: PropTypes.shape.isRequired,
-  values: PropTypes.shape.isRequired,
+  errors: PropTypes.object,
+  values: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
-  touched: PropTypes.bool.isRequired,
+  touched: PropTypes.object,
 };
 export default RegisterFields;

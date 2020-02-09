@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   MDBCollapse,
   MDBContainer,
@@ -7,53 +7,74 @@ import {
   MDBDropdownItem,
   MDBDropdownMenu,
   MDBDropdownToggle,
-  MDBIcon,
   MDBNavbar,
   MDBNavbarBrand,
   MDBNavbarNav,
   MDBNavbarToggler,
   MDBNavItem,
-  MDBNavLink,
 } from 'mdbreact';
-import { Avatar } from './navbar.styles';
+import { logout } from '../../Store/Auth/auth.actions';
+import { StyledNavLink, UserImage, UserName } from './navbar.styles';
 
 export const Navbar = () => {
   const auth = useSelector((store) => store.auth);
-  console.log(auth);
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
+  const logoutUser = useCallback(() => {
+    dispatch(logout());
+  }, [dispatch]);
   return (
     <MDBNavbar color="white" light expand="md">
       <MDBContainer>
         <MDBNavbarBrand>
-          <strong>Fullstack Blog</strong>
+          <StyledNavLink to="/">
+            <strong>Fullstack Blog</strong>
+          </StyledNavLink>
         </MDBNavbarBrand>
         <MDBNavbarToggler onClick={() => setIsOpen(!isOpen)} />
         <MDBCollapse id="navbarCollapse3" isOpen={isOpen} navbar>
           <MDBNavbarNav right>
             <MDBNavItem active>
-              <MDBNavLink to="#!">Home</MDBNavLink>
-            </MDBNavItem>
-            <MDBNavItem>
-              <MDBNavLink to="#!">Features</MDBNavLink>
-            </MDBNavItem>
-            <MDBNavItem>
-              <MDBNavLink to="#!">Pricing</MDBNavLink>
+              <StyledNavLink to="/">Feed</StyledNavLink>
             </MDBNavItem>
           </MDBNavbarNav>
-          <MDBNavItem style={{ listStyle: 'none' }}>
-            <MDBDropdown>
-              <MDBDropdownToggle nav caret>
-                <Avatar />
-                <MDBIcon icon="user" />
-              </MDBDropdownToggle>
-              <MDBDropdownMenu className="dropdown-default">
-                <MDBDropdownItem href="#!">Action</MDBDropdownItem>
-                <MDBDropdownItem href="#!">Another Action</MDBDropdownItem>
-                <MDBDropdownItem href="#!">Something else here</MDBDropdownItem>
-                <MDBDropdownItem href="#!">Something else here</MDBDropdownItem>
-              </MDBDropdownMenu>
-            </MDBDropdown>
-          </MDBNavItem>
+
+          {auth.userLoggedIn ? (
+            <>
+              <MDBNavItem style={{ listStyle: 'none' }}>
+                <StyledNavLink to="/manage">Manage Posts</StyledNavLink>
+              </MDBNavItem>
+              <MDBNavItem style={{ listStyle: 'none' }}>
+                <MDBDropdown>
+                  <MDBDropdownToggle nav>
+                    <UserName>{auth.user.name}</UserName>
+                    <UserImage
+                      src={`http://localhost:3000/${auth.user.profilePicture}`}
+                    />
+                  </MDBDropdownToggle>
+                  <MDBDropdownMenu className="dropdown-default">
+                    <MDBDropdownItem>
+                      <StyledNavLink to="#!">Your Profile</StyledNavLink>
+                    </MDBDropdownItem>
+                    <MDBDropdownItem>
+                      <StyledNavLink to="#!" onClick={logoutUser}>
+                        Logout
+                      </StyledNavLink>
+                    </MDBDropdownItem>
+                  </MDBDropdownMenu>
+                </MDBDropdown>
+              </MDBNavItem>
+            </>
+          ) : (
+            <>
+              <MDBNavItem style={{ listStyle: 'none' }}>
+                <StyledNavLink to="/login">Login</StyledNavLink>
+              </MDBNavItem>
+              <MDBNavItem style={{ listStyle: 'none' }}>
+                <StyledNavLink to="/register">Sign in</StyledNavLink>
+              </MDBNavItem>
+            </>
+          )}
         </MDBCollapse>
       </MDBContainer>
     </MDBNavbar>

@@ -10,7 +10,7 @@ export const validationSchema = Yup.object().shape({
     .required('Password is required!'),
   confirmPassword: Yup.string()
     .required()
-    .test('passwords-match', 'Passwords does not match', (value) => this.parent.password === value),
+    .oneOf([Yup.ref('password')], "Passwords don't match"),
 });
 export const initialValues = {
   email: '',

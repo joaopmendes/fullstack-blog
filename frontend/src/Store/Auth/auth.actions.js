@@ -5,5 +5,5 @@ export const login = (payload) => ({
   payload,
 });
 export const logout = () => ({
-  type: AuthActionTypes.LOGIN_USER,
+  type: AuthActionTypes.LOGOUT,
 });

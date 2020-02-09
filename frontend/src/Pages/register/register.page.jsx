@@ -27,14 +27,17 @@ const RegisterPage = () => {
       .post('/api/register', data, headers)
       .then((res) => {
         setSubmitting(false);
-        const payload = {
-          name: res.data.user.name,
-          email: res.data.user.email,
-          accessToken: res.data.user.accessToken,
-          posts: res.data.user.posts,
-          profilePicture: res.data.user.profilePicture,
-        };
-        dispatch(login(payload));
+
+        if (res.data.code === 200) {
+          const payload = {
+            name: res.data.user.name,
+            email: res.data.user.email,
+            accessToken: res.data.user.accessToken,
+            posts: res.data.user.posts,
+            profilePicture: res.data.user.profilePicture,
+          };
+          dispatch(login(payload));
+        }
       })
       .catch(() => {
         setSubmitting(false);

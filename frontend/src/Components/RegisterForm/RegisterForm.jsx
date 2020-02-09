@@ -25,19 +25,22 @@ const RegisterForm = ({
       touched={touched}
     />
     <WrapperSubmitButton>
-      <Button backgroundColor={isValid ? 'success' : 'danger'} disabled={!isValid || isSubmitting}>
+      <Button
+        backgroundColor={isValid ? 'success' : 'danger'}
+        disabled={!isValid || isSubmitting}
+      >
         Register
       </Button>
     </WrapperSubmitButton>
   </form>
 );
 RegisterForm.propTypes = {
-  errors: PropTypes.shape.isRequired,
-  values: PropTypes.shape.isRequired,
+  errors: PropTypes.object.isRequired,
+  values: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
-  touched: PropTypes.bool.isRequired,
+  touched: PropTypes.object.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   isValid: PropTypes.bool.isRequired,

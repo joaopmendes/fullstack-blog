@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { PageHeading } from '../../Components/MacroControllers/PageHeading';
 import { FormWrapper } from '../../Components/MacroControllers/FormWrapper';
 import LoginForm from '../../Components/LoginForm/LoginForm';
+import { login } from '../../Store/Auth/auth.actions';
 
 const LoginPage = () => {
+  const [serverError, setServerError] = useState('');
+  const dispatch = useDispatch();
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email('Email not valid.')
@@ -23,15 +27,31 @@ const LoginPage = () => {
     validationSchema,
     onSubmit: (values, { setSubmitting }) => {
       setSubmitting(true);
-      const data = new FormData();
-      data.append('email', values.email);
-      data.append('password', values.password);
       axios
-        .post('/api/login', data)
-        .then(() => {
+        .post('/api/login', {
+          email: values.email,
+          password: values.password,
+        })
+        .then((res) => {
           setSubmitting(false);
+          if (res.data.code === 200) {
+            const payload = {
+              name: res.data.user.name,
+              email: res.data.user.email,
+              accessToken: res.data.user.accessToken,
+              posts: res.data.user.posts,
+              profilePicture: res.data.user.profilePicture,
+            };
+            dispatch(login(payload));
+            console.log(payload);
+            setServerError('');
+          } else {
+            setServerError(res.data.errorMessage);
+          }
+          console.log(res);
         })
         .catch(() => {
+          setServerError('Something bad happen. :(');
           setSubmitting(false);
         });
     },
@@ -47,7 +67,6 @@ const LoginPage = () => {
     handleSubmit,
     setFieldValue,
   } = formik;
-
   return (
     <>
       <PageHeading title="Login" />
@@ -62,6 +81,7 @@ const LoginPage = () => {
           isSubmitting={isSubmitting}
           isValid={isValid}
           handleSubmit={handleSubmit}
+          serverError={serverError}
         />
       </FormWrapper>
     </>

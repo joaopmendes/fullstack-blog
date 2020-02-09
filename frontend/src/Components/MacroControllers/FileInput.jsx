@@ -16,7 +16,7 @@ import {
 
 const FileInput = ({
   label,
-  placeholder = '',
+  placeholder,
   value,
   displayErrorWhenImTrue,
   onChange,
@@ -123,13 +123,15 @@ const WrapperInputField = styled.div`
   }
 `;
 FileInput.defaultProps = {
+  label: '',
   placeholder: '',
   displayErrorWhenImTrue: false,
+  value: null,
 };
 FileInput.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   placeholder: PropTypes.string,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   displayErrorWhenImTrue: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
 };
