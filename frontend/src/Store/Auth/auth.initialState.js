@@ -6,5 +6,6 @@ export const initialState = {
     email: '',
     posts: [],
     profilePicture: '',
+    _id: '',
   },
 };

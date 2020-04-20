@@ -8,7 +8,7 @@ const multer = require("../Midllewares/MulterMiddleware");
 // Authentication Routes
 routes.post("/register", multer.single("profile_image"), AuthController.register);
 routes.post("/login", AuthController.login);
-
+routes.get("/user", requireAuth, AuthController.find)
 // Tags routes
 routes.get("/tags", TagController.index);
 
