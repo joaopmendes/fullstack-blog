@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {ErrorMessage} from '../MacroControllers/macro.styles';
 import {WrapperSubmitButton} from '../../global.styles';
 import {Button} from '../MacroControllers/button.component';
 import CreatePostFieldsComponent from './create-post-fields.component';
@@ -39,14 +38,14 @@ const CreatePostFormComponent = ({
 
             <form onSubmit={handleSubmit}>
                 <CreatePostFieldsComponent
-                    errors={errors}
-                    values={values}
-                    handleChange={handleChange}
-                    setFieldValue={setFieldValue}
-                    handleBlur={handleBlur}
-                    touched={touched}
-                    setTouched={setTouched}
-                />
+                errors={errors}
+                values={values}
+                handleChange={handleChange}
+                setFieldValue={setFieldValue}
+                handleBlur={handleBlur}
+                touched={touched}
+                setTouched={setTouched}
+            />
                 <WrapperSubmitButton>
                     <Button
                         backgroundColor={isValid ? 'success' : 'danger'}

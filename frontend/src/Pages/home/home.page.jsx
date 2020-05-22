@@ -8,6 +8,7 @@ import CardWrapperComponent from '../../Components/CardWrapper/card-wrapper.comp
 import CardWrapperHeaderComponent from '../../Components/CardWrapperHeader/card-wrapper-header.component';
 import BlogPageBodyComponent from '../../Components/BlogPageBody/blog-page-body.component';
 import {updateUserData} from "../../Store/Auth/auth.actions";
+import {addNotification} from "../../Store/Notifications/notifications.actions";
 
 export const HomePage = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ export const HomePage = () => {
   useEffect(() => {
     dispatch(fetchPosts());
     dispatch(updateUserData());
+    dispatch(addNotification({title: 'Teste', message: "teste me", type: "teste"}));
     const getPostsInterval = setInterval(() => {
       dispatch(fetchPosts());
     }, 30000);
