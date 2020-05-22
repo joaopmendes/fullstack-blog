@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FaCog, MdContacts, MdEmail } from 'react-icons/all';
-import { InputText } from '../MacroControllers/InputText';
-import { FileInput } from '../MacroControllers/FileInput';
+import { InputText } from '../MacroControllers/input-text.component';
+import { FileInput } from '../MacroControllers/file-input.component';
 
 const RegisterFields = ({
   errors,

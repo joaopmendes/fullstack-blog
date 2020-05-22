@@ -8,6 +8,7 @@ import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import './main.css';
 import { StyledTheme } from './create-theme.style';
+import { MDBAlert } from 'mdbreact';
 
 const App = () => (
   <StyledTheme>

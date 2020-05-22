@@ -1,9 +1,9 @@
 import React from 'react';
 import { FaCog, MdEmail } from 'react-icons/all';
 import PropTypes from 'prop-types';
-import { InputText } from '../MacroControllers/InputText';
+import { InputText } from '../MacroControllers/input-text.component';
 
-const LoginFields = ({
+const LoginFieldsComponent = ({
   errors,
   touched,
   values,
@@ -39,11 +39,11 @@ const LoginFields = ({
     />
   </>
 );
-LoginFields.defaultProps = {
+LoginFieldsComponent.defaultProps = {
   errors: {},
   touched: {},
 };
-LoginFields.propTypes = {
+LoginFieldsComponent.propTypes = {
   errors: PropTypes.object,
   values: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
@@ -51,4 +51,4 @@ LoginFields.propTypes = {
   handleBlur: PropTypes.func.isRequired,
   touched: PropTypes.object,
 };
-export default LoginFields;
+export default LoginFieldsComponent;
