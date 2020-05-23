@@ -1,3 +1,4 @@
 .idea
 /Backend/.env
+/Backend/public/images
 /Backend/node_modules

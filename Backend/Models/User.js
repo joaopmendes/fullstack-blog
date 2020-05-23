@@ -8,7 +8,8 @@ const userSchema = new db.Schema({
     accessToken: {type: String, default: ""},
     posts: [
         {type: db.Schema.Types.ObjectId, ref: "post"}
-    ]
+    ],
+    admin: {type: Boolean, default: false}
 });
 /**
  * This function returns the post by default, or if it is a string checks
