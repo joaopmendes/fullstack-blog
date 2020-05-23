@@ -1,19 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { MDBRow, MDBCol, MDBMask, MDBIcon, MDBView, MDBBtn } from 'mdbreact';
-
+import { useHistory } from 'react-router-dom';
+import { getDaysSince } from '../../helpers/helpers';
 const BlogPageBodyComponent = () => {
   const { posts } = useSelector((state) => state.post);
-  const getDaysSince = (date) => {
-    // The number of milliseconds in one day
-    const ONE_DAY = 1000 * 60 * 60 * 24;
+  const history = useHistory();
 
-    // Calculate the difference in milliseconds
-    const differenceMs = Math.abs(new Date() - new Date(date));
-
-    // Convert back to days and return
-    return Math.round(differenceMs / ONE_DAY);
-  };
   return (
     <>
       {posts.map((post) => (
@@ -60,7 +53,14 @@ const BlogPageBodyComponent = () => {
                 </a>
                 , {`${getDaysSince(post.created_at)}`} days
               </p>
-              <MDBBtn color="success" size="md" className="waves-light ">
+              <MDBBtn
+                color="success"
+                size="md"
+                className="waves-light"
+                onClick={() => {
+                  history.push('/posts/show/' + post._id);
+                }}
+              >
                 Read more
               </MDBBtn>
             </MDBCol>

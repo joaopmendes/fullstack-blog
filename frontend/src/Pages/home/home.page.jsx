@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPosts } from '../../Store/Post/post.actions';
-import { getRandomsFromArray } from '../../Helpers/helpers';
+import { getRandomsFromArray } from '../../helpers/helpers';
 import { BlogLayoutComponent } from '../../Components/BlogLayout/blog-layout.component';
 
 import CardWrapperComponent from '../../Components/CardWrapper/card-wrapper.component';
