@@ -46,7 +46,9 @@ export const Navbar = () => {
                     <MDBNavLink to="/admin/dashboard">Admin Panel</MDBNavLink>
                   </MDBNavItem>
                 )}
-
+                <MDBNavItem style={{ listStyle: 'none' }}>
+                  <MDBNavLink to="/create-post">Create Post</MDBNavLink>
+                </MDBNavItem>
                 <MDBNavItem style={{ listStyle: 'none' }}>
                   <MDBNavLink to="/manage-posts">Manage Posts</MDBNavLink>
                 </MDBNavItem>

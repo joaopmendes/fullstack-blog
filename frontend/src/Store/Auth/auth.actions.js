@@ -1,11 +1,16 @@
 import { AuthActionTypes } from './auth.types';
-import {getUserData} from "../../api/auth";
+import { getUserData } from '../../api/auth';
 export const updateUserData = () => async (dispatch, getState) => {
-  const {auth} = getState();
-  if(auth.userLoggedIn) {
-    const data = await getUserData(auth.user.accessToken);
-    console.log(data)
-    if(data) {
+  const { auth } = getState();
+  if (auth.userLoggedIn) {
+    let data = null;
+    try {
+      data = await getUserData(auth.user.accessToken);
+    } catch {
+      dispatch(logout());
+      return;
+    }
+    if (data) {
       const payload = {
         name: data.name,
         email: data.email,
@@ -17,10 +22,12 @@ export const updateUserData = () => async (dispatch, getState) => {
         id: data._id,
       };
       dispatch(login(payload));
-      login()
+    } else {
+      dispatch(logout());
+      return;
     }
   }
-}
+};
 export const login = (payload) => ({
   type: AuthActionTypes.LOGIN_USER,
   payload,
