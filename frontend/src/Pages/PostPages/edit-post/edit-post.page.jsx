@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import CardWrapperComponent from '../../Components/CardWrapper/card-wrapper.component';
 import CardWrapperHeaderComponent from '../../Components/CardWrapperHeader/card-wrapper-header.component';
 import { FormWrapper } from '../../Components/MacroControllers/form-wrapper.component';
-import { initialValues, validationSchema } from './create-post.config';
+import { initialValues, validationSchema } from '../post.config';
 import CreatePostFormComponent from '../../Components/CreatePostForm/create-post-form.component';
 import { createPost } from '../../api/blog';
 import { updateUserData } from '../../Store/Auth/auth.actions';
