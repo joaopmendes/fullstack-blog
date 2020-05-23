@@ -68,3 +68,35 @@ export const deletePost = ({ token, postId }) => {
       };
     });
 };
+
+export const editPost = (token, id, newPost) => {
+  const data = new FormData();
+  data.append('subject', newPost.subject);
+  data.append('body', newPost.body);
+  data.append('tags', newPost.tags || '');
+  data.append('post_image', newPost.thumbnail);
+
+  const headers = {
+    headers: {
+      'content-type': 'multipart/form-data',
+      Authorization: 'Bearer ' + token,
+    },
+  };
+  return axios
+    .put(`/api/posts/${id}`, data, headers)
+    .then((res) => {
+      console.log('[BLOG API] Created post with success.');
+
+      return { hasError: false, data: res.data.data, errorMessage: '' };
+    })
+    .catch((err) => {
+      return {
+        hasError: true,
+        data: err.response.data,
+        errorMessage:
+          err.response.errorMessage?.[0] ||
+          err.response.errorMessage ||
+          'Could not update post.',
+      };
+    });
+};

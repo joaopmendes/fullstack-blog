@@ -41,16 +41,11 @@ export const Navbar = () => {
           <MDBNavbarNav left>
             {auth.userLoggedIn ? (
               <>
-                {auth.user.isAdmin && (
-                  <MDBNavItem style={{ listStyle: 'none' }}>
-                    <MDBNavLink to="/admin/dashboard">Admin Panel</MDBNavLink>
-                  </MDBNavItem>
-                )}
                 <MDBNavItem style={{ listStyle: 'none' }}>
-                  <MDBNavLink to="/create-post">Create Post</MDBNavLink>
+                  <MDBNavLink to="/posts/create">Create Post</MDBNavLink>
                 </MDBNavItem>
                 <MDBNavItem style={{ listStyle: 'none' }}>
-                  <MDBNavLink to="/manage-posts">Manage Posts</MDBNavLink>
+                  <MDBNavLink to="/posts/manage">Manage Posts</MDBNavLink>
                 </MDBNavItem>
                 <MDBNavItem style={{ listStyle: 'none' }}>
                   <MDBDropdown>
@@ -66,7 +61,6 @@ export const Navbar = () => {
                           to=""
                           onClick={() => {
                             logoutUser();
-                            console.log('teste');
                           }}
                         >
                           Logout

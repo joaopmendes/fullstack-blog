@@ -6,9 +6,11 @@ import { updateUserData } from '../../Store/Auth/auth.actions';
 import { fetchPosts } from '../../Store/Post/post.actions';
 import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
+import { useHistory } from 'react-router-dom';
 const ManagePostList = ({ user }) => {
   const dispatch = useDispatch();
   const { addToast } = useToasts();
+  const history = useHistory();
   const data = {
     columns: [
       {
@@ -49,9 +51,17 @@ const ManagePostList = ({ user }) => {
             dispatch(updateUserData());
             dispatch(fetchPosts());
           }}
-          type={'danger'}
+          color={'danger'}
         >
           Delete
+        </MDBBtn>,
+        <MDBBtn
+          onClick={async () => {
+            history.push('/posts/edit/' + post._id);
+          }}
+          color={'warning'}
+        >
+          Edit
         </MDBBtn>,
       ],
     })),

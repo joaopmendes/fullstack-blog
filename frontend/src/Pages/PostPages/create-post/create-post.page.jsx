@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { BlogLayoutComponent } from '../../Components/BlogLayout/blog-layout.component';
+import { BlogLayoutComponent } from '../../../Components/BlogLayout/blog-layout.component';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
-import CardWrapperComponent from '../../Components/CardWrapper/card-wrapper.component';
-import CardWrapperHeaderComponent from '../../Components/CardWrapperHeader/card-wrapper-header.component';
-import { FormWrapper } from '../../Components/MacroControllers/form-wrapper.component';
-import { initialValues, validationSchema } from './create-post.config';
-import CreatePostFormComponent from '../../Components/CreatePostForm/create-post-form.component';
-import { createPost } from '../../api/blog';
-import { updateUserData } from '../../Store/Auth/auth.actions';
+import CardWrapperComponent from '../../../Components/CardWrapper/card-wrapper.component';
+import CardWrapperHeaderComponent from '../../../Components/CardWrapperHeader/card-wrapper-header.component';
+import { FormWrapper } from '../../../Components/MacroControllers/form-wrapper.component';
+import { initialValues, validationSchema } from '../post.config';
+import CreatePostFormComponent from '../../../Components/CreatePostForm/create-post-form.component';
+import { createPost } from '../../../api/blog';
+import { updateUserData } from '../../../Store/Auth/auth.actions';
 import { useToasts } from 'react-toast-notifications';
-import { fetchPosts } from '../../Store/Post/post.actions';
+import { fetchPosts } from '../../../Store/Post/post.actions';
 const CreatePostPage = () => {
   const [serverError, setServerError] = useState('');
   const dispatch = useDispatch();
@@ -21,7 +21,6 @@ const CreatePostPage = () => {
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
-      setSubmitting(false);
       const { hasError, errorMessage, data } = await createPost({
         token: user.accessToken,
         subject: values.subject,
@@ -29,6 +28,7 @@ const CreatePostPage = () => {
         tags: values.tags,
         thumbnail: values.thumbnail,
       });
+      setSubmitting(false);
 
       if (hasError) {
         toastManager.addToast(errorMessage, { appearance: 'error' });
