@@ -6,6 +6,7 @@ import RegisterPage from '../Pages/register/register.page';
 import LoginPage from '../Pages/login/login.page';
 import CreatePostPage from '../Pages/PostPages/create-post/create-post.page';
 import ManagePostPage from '../Pages/PostPages/manage-posts/manage-posts.page';
+import EditPostPage from '../Pages/PostPages/edit-post/edit-post.page';
 
 const OnlyNotLoginRoute = ({ Component, ...rest }) => {
   const auth = useSelector((state) => state.auth);
@@ -36,7 +37,7 @@ const NormalRoutes = () => (
     <OnlyNotLoginRoute path="/register" Component={RegisterPage} />
     <OnlyLoginRoute path="/manage" Component={RegisterPage} />
     <OnlyLoginRoute path="/posts/create" Component={CreatePostPage} />
-    <OnlyLoginRoute path="/posts/edit/:id" Component={HomePage} />
+    <OnlyLoginRoute path="/posts/edit/:id" Component={EditPostPage} />
     <OnlyLoginRoute path="/posts/manage" Component={ManagePostPage} />
     <OnlyNotLoginRoute path="/login" Component={LoginPage} />
   </>

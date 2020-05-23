@@ -21,7 +21,6 @@ const CreatePostPage = () => {
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
-      setSubmitting(false);
       const { hasError, errorMessage, data } = await createPost({
         token: user.accessToken,
         subject: values.subject,
@@ -29,6 +28,7 @@ const CreatePostPage = () => {
         tags: values.tags,
         thumbnail: values.thumbnail,
       });
+      setSubmitting(false);
 
       if (hasError) {
         toastManager.addToast(errorMessage, { appearance: 'error' });

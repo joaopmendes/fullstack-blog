@@ -102,7 +102,7 @@ module.exports = {
     // Returns an array with errors
     const errors = validateStoreInputs(subject, body);
     if (errors.length > 0) {
-      return res.status(405).json({ errors });
+      return res.status(405).json({ errorMessage: errors });
     }
     if (!(await checkIfPostIsFromUser(id, req.user))) {
       return res.status(403).json({ code: 403, errorMessage: "Post cannot be updated with your permissions" });
@@ -110,7 +110,7 @@ module.exports = {
       return Post.findById(id)
         .then(async doc => {
           if (!doc) {
-            return res.status(400).json({ code: 500, error: "Could not find post with that id" });
+            return res.status(400).json({ code: 400, error: "Could not find post with that id" });
           }
           doc.subject = subject;
           doc.body = body;

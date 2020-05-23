@@ -11,7 +11,6 @@ const ManagePostPage = () => {
     <BlogLayoutComponent>
       <CardWrapperComponent>
         <CardWrapperHeaderComponent title={'Manage Posts'} />
-
         <ManagePostList user={user} />
       </CardWrapperComponent>
     </BlogLayoutComponent>
