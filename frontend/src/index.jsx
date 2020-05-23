@@ -9,11 +9,14 @@ import 'mdbreact/dist/css/mdb.css';
 import './main.css';
 import { StyledTheme } from './create-theme.style';
 import { MDBAlert } from 'mdbreact';
+import { ToastProvider } from 'react-toast-notifications';
 
 const App = () => (
   <StyledTheme>
     <ReduxStore>
-      <RouterConfig />
+      <ToastProvider autoDismiss autoDismissTimeout={6000}>
+        <RouterConfig />
+      </ToastProvider>
     </ReduxStore>
   </StyledTheme>
 );
