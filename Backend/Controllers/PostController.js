@@ -27,10 +27,7 @@ async function checkIfPostIsFromUser(postId, user) {
 module.exports = {
   async index(req, res) {
     return res.status(200).json({
-      data: await Post.find({}, "-__v")
-        .populate("author", "name email -_id")
-        .populate("tags", "-_id -__v")
-        .exec()
+      data: await Post.find({}, "-__v").populate("author", "name email -_id").populate("tags", "-_id -__v").exec(),
     });
   },
   async store(req, res) {
@@ -47,7 +44,7 @@ module.exports = {
       post = new Post({ subject, body, created_at: new Date().toJSON() });
       post.author = req.user;
       if (req.file) {
-        post.postImage = req.file.path;
+        post.postImage = req.file.path.replace("public/", "");
       }
       let tagsArray = tags ? tags.split(",") : [];
       if (tagsArray && tagsArray.length > 0) {
@@ -91,7 +88,7 @@ module.exports = {
           await req.user.removePost(id);
           return res.status(200).json({ code: 200, message: "Post deleted" });
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(500).json({ code: 500, errrorMessage: "Post cannot be deleted" });
         });
     }
@@ -108,14 +105,14 @@ module.exports = {
       return res.status(403).json({ code: 403, errorMessage: "Post cannot be updated with your permissions" });
     } else {
       return Post.findById(id)
-        .then(async doc => {
+        .then(async (doc) => {
           if (!doc) {
             return res.status(400).json({ code: 400, error: "Could not find post with that id" });
           }
           doc.subject = subject;
           doc.body = body;
           if (req.file) {
-            doc.postImage = req.file.path;
+            doc.postImage = req.file.path.replace("public/", "");
           }
           await doc.clearTags();
           let tagsArray = tags ? tags.split(",") : [];
@@ -136,9 +133,9 @@ module.exports = {
           }
           return res.status(200).json({ code: 200, data: doc });
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(500).json({ code: 500, errorMessage: "Post cannot be updated" });
         });
     }
-  }
+  },
 };

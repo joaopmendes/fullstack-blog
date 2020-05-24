@@ -38,7 +38,7 @@ export const PostViewPage = ({
                       ? `${
                           process.env.NODE_ENV === 'development'
                             ? `http://localhost:4000/`
-                            : ''
+                            : '/'
                         }${post.postImage.replace(/\\/g, '/')}`
                       : 'https://mdbootstrap.com/img/Photos/Others/img%20(27).jpg'
                   }
