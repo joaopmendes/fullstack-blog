@@ -14,6 +14,10 @@ import { createPost, editPost } from '../../../api/blog';
 import { updateUserData } from '../../../Store/Auth/auth.actions';
 import { useToasts } from 'react-toast-notifications';
 import { fetchPosts } from '../../../Store/Post/post.actions';
+import {
+  addLoader,
+  removeLoader,
+} from '../../../Store/Controls/controls.actions';
 const EditPostPage = ({
   history: { push },
   match: {
@@ -51,6 +55,7 @@ const EditPostPage = ({
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
+      dispatch(addLoader('EDIT_POST'));
       const { hasError, errorMessage, data } = await editPost(
         user.accessToken,
         id,
@@ -61,6 +66,8 @@ const EditPostPage = ({
           thumbnail: values.thumbnail,
         },
       );
+      dispatch(removeLoader('EDIT_POST'));
+
       setSubmitting(false);
 
       if (hasError) {
@@ -68,7 +75,7 @@ const EditPostPage = ({
         setServerError(errorMessage);
         console.log('[Edit Post] data', data);
       } else {
-        toastManager.addToast('Post created successfully', {
+        toastManager.addToast('Post updated successfully', {
           appearance: 'success',
         });
         dispatch(updateUserData());

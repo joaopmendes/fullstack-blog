@@ -11,6 +11,10 @@ import { createPost } from '../../../api/blog';
 import { updateUserData } from '../../../Store/Auth/auth.actions';
 import { useToasts } from 'react-toast-notifications';
 import { fetchPosts } from '../../../Store/Post/post.actions';
+import {
+  addLoader,
+  removeLoader,
+} from '../../../Store/Controls/controls.actions';
 const CreatePostPage = () => {
   const [serverError, setServerError] = useState('');
   const dispatch = useDispatch();
@@ -21,6 +25,7 @@ const CreatePostPage = () => {
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
+      dispatch(addLoader('CREATE_POST'));
       const { hasError, errorMessage, data } = await createPost({
         token: user.accessToken,
         subject: values.subject,
@@ -28,6 +33,8 @@ const CreatePostPage = () => {
         tags: values.tags,
         thumbnail: values.thumbnail,
       });
+      dispatch(removeLoader('CREATE_POST'));
+
       setSubmitting(false);
 
       if (hasError) {

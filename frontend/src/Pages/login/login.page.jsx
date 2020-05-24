@@ -10,6 +10,7 @@ import { BlogLayoutComponent } from '../../Components/BlogLayout/blog-layout.com
 import CardWrapperComponent from '../../Components/CardWrapper/card-wrapper.component';
 import CardWrapperHeaderComponent from '../../Components/CardWrapperHeader/card-wrapper-header.component';
 import { useToasts } from 'react-toast-notifications';
+import { addLoader, removeLoader } from '../../Store/Controls/controls.actions';
 const LoginPage = () => {
   const [serverError, setServerError] = useState('');
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ const LoginPage = () => {
     validationSchema,
     onSubmit: (values, { setSubmitting }) => {
       setSubmitting(true);
+      dispatch(addLoader('LOGIN'));
       axios
         .post('/api/login', {
           email: values.email,
@@ -38,6 +40,8 @@ const LoginPage = () => {
         .then((res) => {
           setSubmitting(false);
           if (res.data.code === 200) {
+            dispatch(removeLoader('LOGIN'));
+
             const payload = {
               name: res.data.user.name,
               email: res.data.user.email,
@@ -53,12 +57,15 @@ const LoginPage = () => {
             addToast(`You're being redirected...`, { appearance: 'info' });
             setServerError('');
           } else {
+            dispatch(removeLoader('LOGIN'));
             setServerError(res.data.errorMessage);
           }
           console.log(res);
         })
         .catch(() => {
           setServerError('Something bad happen. :(');
+          dispatch(removeLoader('LOGIN'));
+
           setSubmitting(false);
         });
     },

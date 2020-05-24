@@ -11,6 +11,7 @@ import CardWrapperComponent from '../../Components/CardWrapper/card-wrapper.comp
 import CardWrapperHeaderComponent from '../../Components/CardWrapperHeader/card-wrapper-header.component';
 import { useToasts } from 'react-toast-notifications';
 import { registerUser } from '../../api/auth';
+import { addLoader, removeLoader } from '../../Store/Controls/controls.actions';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,10 @@ const RegisterPage = () => {
 
   const onSubmit = async (values, { setSubmitting }) => {
     setSubmitting(true);
+    dispatch(addLoader('REGISTER_USER_LOADER'));
     const { hasError, data, errorMessage } = await registerUser(values);
+    dispatch(removeLoader('REGISTER_USER_LOADER'));
+
     setSubmitting(false);
     if (hasError) {
       addToast('Could not create user.', { appearance: 'error' });

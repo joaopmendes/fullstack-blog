@@ -9,10 +9,12 @@ import storage from 'redux-persist/lib/storage'; // defaults to localStorage for
 import PropTypes from 'prop-types';
 import { AuthReducer } from './Store/Auth/auth.reducer';
 import { PostReducer } from './Store/Post/post.reducer';
+import { ControlsReducer } from './Store/Controls/controls.reducer';
 
 const rootReducers = combineReducers({
   auth: AuthReducer,
   post: PostReducer,
+  controls: ControlsReducer,
 });
 
 const persistConfig = {

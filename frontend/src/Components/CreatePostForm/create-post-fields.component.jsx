@@ -17,7 +17,7 @@ const CreatePostFieldsComponent = ({
   const [key, setKey] = useState(uuid());
   const [previousBody, setPreviousBody] = useState(null);
   useEffect(() => {
-    if (previousBody === null) {
+    if (previousBody === null || previousBody === '') {
       setKey(uuid());
     }
     setPreviousBody(values.body);

@@ -7,6 +7,7 @@ import { fetchPosts } from '../../Store/Post/post.actions';
 import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import { useHistory } from 'react-router-dom';
+import { addLoader, removeLoader } from '../../Store/Controls/controls.actions';
 const ManagePostList = ({ user }) => {
   const dispatch = useDispatch();
   const { addToast } = useToasts();
@@ -38,10 +39,13 @@ const ManagePostList = ({ user }) => {
       options: [
         <MDBBtn
           onClick={async () => {
+            dispatch(addLoader('DELETE_POST'));
             const { errorMessage, hasError } = await deletePost({
               token: user.accessToken,
               postId: post._id,
             });
+            dispatch(removeLoader('DELETE_POST'));
+
             if (hasError) {
               addToast(errorMessage, { appearance: 'error' });
               return;
